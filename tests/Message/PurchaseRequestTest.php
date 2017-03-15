@@ -3,6 +3,7 @@
 namespace Omnipay\Przelewy24\Message;
 
 use Omnipay\Common\CreditCard;
+use Omnipay\Przelewy24\Gateway;
 use Omnipay\Tests\TestCase;
 
 class PurchaseRequestTest extends TestCase
@@ -34,7 +35,16 @@ class PurchaseRequestTest extends TestCase
         ));
     }
 
-    public function testGetData()
+    public function channelProvider() {
+        return [
+            [Gateway::P24_CHANNEL_USE_PREPAYMENT],
+            [null],
+        ];
+    }
+    /**
+     * @dataProvider channelProvider
+     */
+    public function testGetData($channel)
     {
         $card = new CreditCard(array(
             'email' => 'test@example.com',
@@ -52,6 +62,7 @@ class PurchaseRequestTest extends TestCase
             'returnUrl'   => 'https://www.example.com/return',
             'notifyUrl'   => 'https://www.example.com/notify',
             'card'        => $card,
+            'channel'     => $channel,
         ));
 
         $data = $this->request->getData();
@@ -67,7 +78,14 @@ class PurchaseRequestTest extends TestCase
         $this->assertSame('https://www.example.com/notify', $data['p24_url_status']);
         $this->assertSame('d565d579d28f4374a7c2852a8e3f8fd7', $data['p24_sign']);
         $this->assertSame('3.2', $data['p24_api_version']);
-        $this->assertCount(15, $data);
+
+        if (null === $channel) {
+            $this->assertCount(15, $data);
+        } else {
+            $this->assertSame($channel, $data['p24_channel']);
+            $this->assertCount(16, $data);
+        }
+
     }
 
     public function testSendSuccess()

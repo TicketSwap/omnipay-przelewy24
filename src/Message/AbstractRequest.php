@@ -64,6 +64,23 @@ abstract class AbstractRequest extends BaseAbstractRequest
     /**
      * @return string
      */
+    public function getChannel()
+    {
+        return $this->getParameter('channel');
+    }
+
+    /**
+     * @param  string $value
+     * @return $this
+     */
+    public function setChannel($value)
+    {
+        return $this->setParameter('channel', $value);
+    }
+
+    /**
+     * @return string
+     */
     public function getEndpoint()
     {
         return $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;

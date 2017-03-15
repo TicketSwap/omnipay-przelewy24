@@ -65,6 +65,19 @@ if ($response->isSuccessful()) {
 }
 ```
 
+Optionally you can specify the payment channels allowed adding the 'channel' parameter in the Gateway
+initialization call.
+
+```
+$gateway->initialize([
+    //[...]
+    'channel' => Gateway::P24_CHANNEL_CC,
+]);
+    
+```
+
+For a list of all the supported values for 'Channel' you can read the [przelewy24 documentation](http://www.przelewy24.pl/eng/storage/app/media/pobierz/Instalacja/przelewy24_specification.pdf)
+
 ## Support
 
 If you are having general issues with Omnipay, we suggest posting on
