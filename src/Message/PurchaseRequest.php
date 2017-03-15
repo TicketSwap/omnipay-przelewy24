@@ -85,6 +85,10 @@ class PurchaseRequest extends AbstractRequest
             'p24_api_version' => self::$apiVersion,
         );
 
+        if (null !== $this->getChannel()) {
+            $data['p24_channel'] = $this->getChannel();
+        }
+
         $items = $this->getItems();
         if ($items) {
             $index = 1;

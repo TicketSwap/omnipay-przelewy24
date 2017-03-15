@@ -2,6 +2,7 @@
 
 namespace Omnipay\Przelewy24;
 
+use Omnipay\Przelewy24\Exception\NonValidChannelException;
 use Omnipay\Tests\GatewayTestCase;
 
 class GatewayTest extends GatewayTestCase
@@ -69,6 +70,26 @@ class GatewayTest extends GatewayTestCase
 
         $this->gateway->setCrc($crc);
         $this->assertSame($crc, $this->gateway->getCrc());
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_set_and_get_channel()
+    {
+        $channel = 32;
+
+        $this->gateway->setChannel($channel);
+        $this->assertSame($channel, $this->gateway->getChannel());
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_throw_exception_when_setting_an_unsupported_channel()
+    {
+        $this->setExpectedException(NonValidChannelException::class);
+        $this->gateway->setChannel(100);
     }
 
     /**
